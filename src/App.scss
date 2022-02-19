@@ -1,0 +1,158 @@
+// Russo One Font
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Russo+One&display=swap');
+
+// Variables
+$gray: #8d8d8d;
+$lightGray: #b3b3b3;
+$darkGray: #808080;
+$veryDarkGray: #424242;
+$black: #000000;
+$orange: #ffa500;
+$blue: #0000ff;
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box
+}
+
+button {
+  border: none;
+  font-family: inherit;
+}
+
+button,
+input[type="checkbox"] {
+  cursor: pointer;
+}
+
+body {
+  background-color: $gray;
+  font-family: 'Russo One', sans-serif;
+  display: grid;
+  place-items: center;
+  height: 100vh;
+}
+
+#drum-machine {
+  background-color: $lightGray;
+  display: flex;
+  gap: 2em;
+  border: 3px solid $orange;
+  padding: 1.25em;
+  position: relative;
+}
+
+.drum-pad-container {
+  display: grid; 
+  grid-template-columns: repeat(3, 100px);
+  grid-template-rows: repeat(3, 80px);
+  gap: .5em;
+
+  .drum-pad {
+    background-color: $darkGray;
+    border-radius: 4px;
+    box-shadow: 3px 3px 4px $black;
+
+    &.active {
+      background-color: orange;
+      position: relative;
+      top: 3px;
+      box-shadow: none;
+    }
+  }
+}
+
+#controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+
+  .logo {
+    position: absolute;
+    top: 0;
+    right: .25em;
+    display: flex;
+    align-items: center;
+    gap: .25em;
+    font-style: italic;
+    font-size: 1.25rem;
+
+    svg {
+      font-size: 1.75rem;
+    }
+  }
+}
+
+.control {
+  display: grid;
+  place-items: center;
+
+  .switch {
+    width: 54px;
+    height: 24px;
+    background-color: $black;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 3px;
+
+    input {
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      position: absolute;
+      z-index: 1;
+
+      &:checked {
+        & ~ .slider {
+          transform: translateX(-25px);
+        }
+      }
+
+      &:unchecked {
+        & ~ .slider {
+          transform: translateX(25px);
+        }
+      }
+    }
+
+    .slider {
+      width: 23px;
+      height: 19px;
+      background-color: $blue;
+    }
+  }
+}
+
+#display {
+  background-color: $darkGray;
+  width: 200px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+}
+
+#volume {
+  appearance: none;
+  cursor: pointer;
+  width: 240px;
+
+  &::-moz-range-thumb {
+    border: none;
+    background-color: $blue;
+    border-radius: 0;
+    height: 25px;
+    width: 10px;
+    box-shadow: 1px 1px 2px $black;
+  }
+
+  &::-moz-range-track {
+    background-color: $veryDarkGray;
+    height: 8px;
+    box-shadow: 1px 1px 2px $black;
+  }
+}
