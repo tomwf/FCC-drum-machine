@@ -86,22 +86,24 @@ const DrumMachine = () => {
   const [bank, setBank] = useState('Heater')
 
   // Listen for user to press on key
-  document.addEventListener('keydown', (event) => {
+  document.onkeydown = (event) => {
+    console.log(event.key)
     const audio = document.getElementById(event.key.toUpperCase())
 
     if (audio) {
       playSoundFromKey(audio)
       animatePad(audio.parentNode)
     }
-  })
+  }
 
   // Listen for user to click on a pad
-  document.addEventListener('mouseup', (event) => {
+  document.onmouseup = (event) => {
     const target = event.target
+    console.log(target)
     if (target.classList.contains('drum-pad')) {
       animatePad(target)
     }
-  })
+  }
 
   // Generate drum pad
   const drumPad = CONSTANTS.BANK['Heater'].map((soundUrl, i) => (
