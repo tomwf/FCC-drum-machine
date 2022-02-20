@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { FaFreeCodeCamp } from 'react-icons/fa'
 import * as CONSTANTS from '../CONSTANTS'
 
@@ -9,14 +10,17 @@ const DrumMachine = () => {
 
   function playSoundFromMouse(event) {
     const audio = event.target.childNodes[1]
-    audio.play()
-    updateDisplay(soundName(audio))
+    if (audio.src.endsWith('.mp3')) {
+      audio.play()
+      updateDisplay(soundName(audio))
+    }
   }
 
-  function playSoundFromKey(event) {
-    const audio = document.getElementById(event)
-    audio?.play()
-    updateDisplay(soundName(audio))
+  function playSoundFromKey(audio) {
+    if (audio.src.endsWith('.mp3')) {
+      audio.play()
+      updateDisplay(soundName(audio))
+    }
   }
 
   function updateDisplay(text) {
@@ -24,51 +28,78 @@ const DrumMachine = () => {
   }
 
   function handleOnOff(event) {
-    const isPoweredOn = event.target.checked
     const buttons = document.querySelector('.drum-pad-container').childNodes
 
-    if (isPoweredOn) {
-      buttons.forEach(button => button.disabled = true)
+    if (power) {
+      document.querySelector('.power').classList.add('power--off')
+      buttons.forEach(button => {
+        button.classList.add('off')
+        button.childNodes[1].src = ""
+      })
     } else {
-      buttons.forEach(button => button.disabled = false)
+      document.querySelector('.power').classList.remove('power--off')
+      buttons.forEach((button, i) => {
+        button.classList.remove('off')
+        button.childNodes[1].src = CONSTANTS.BANK[bank][i]
+      })
     }
     updateDisplay('')
+    setPower(!power)
   }
 
   function setVolume(event) {
     const volume = event.target.value / 100
     const buttons = document.querySelector('.drum-pad-container').childNodes
-    
+
     buttons.forEach(button => button.childNodes[1].volume = volume)
     updateDisplay(`Volume: ${(volume * 100).toFixed(0)} %`)
   }
 
   function switchBank(event) {
-    const isHeater = event.target.checked
     const buttons = document.querySelector('.drum-pad-container').childNodes
 
-    if (isHeater) {
+    if (!power) return
+
+    if (bank === 'Heater') {
+      document.querySelector('.bank').classList.add('bank--piano')
       buttons.forEach((button, i) => {
         button.childNodes[1].src = CONSTANTS.BANK['Piano'][i]
       })
+      setBank('Piano')
     } else {
+      document.querySelector('.bank').classList.remove('bank--piano')
       buttons.forEach((button, i) => {
         button.childNodes[1].src = CONSTANTS.BANK['Heater'][i]
       })
+      setBank('Heater')
     }
     updateDisplay('')
   }
 
-  // Listen for user to click on key
+  function animatePad(pad) {
+    pad.classList.add('active')
+    setTimeout(() => pad.classList.remove('active'), 100)
+  }
+
+  // States
+  const [power, setPower] = useState(true)
+  const [bank, setBank] = useState('Heater')
+
+  // Listen for user to press on key
   document.addEventListener('keydown', (event) => {
-    playSoundFromKey(event.key.toUpperCase())
+    const audio = document.getElementById(event.key.toUpperCase())
+
+    if (audio) {
+      playSoundFromKey(audio)
+      animatePad(audio.parentNode)
+    }
   })
 
-  // Drum pad animation
+  // Listen for user to click on a pad
   document.addEventListener('mouseup', (event) => {
     const target = event.target
-    if (target.className === 'drum-pad') {
-      target.style.backgroundColor = 'orange'
+    if (target.classList.contains('drum-pad')) {
+      animatePad(target)
     }
   })
 
@@ -93,7 +124,7 @@ const DrumMachine = () => {
         </div>
         <div className="control">
           <p>Power</p>
-          <div className="switch">
+          <div className="switch power">
             <input type="checkbox" onChange={handleOnOff} />
             <div className="slider"></div>
           </div>
@@ -105,7 +136,7 @@ const DrumMachine = () => {
 
         <div className="control">
           <p>Bank</p>
-          <div className="switch">
+          <div className="switch bank">
             <input type="checkbox" onChange={switchBank} />
             <div className="slider"></div>
           </div>

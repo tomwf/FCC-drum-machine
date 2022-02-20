@@ -55,10 +55,14 @@ body {
     box-shadow: 3px 3px 4px $black;
 
     &.active {
-      background-color: orange;
+      background-color: $orange;
       position: relative;
       top: 3px;
       box-shadow: none;
+
+      &.off {
+        background-color: $darkGray;
+      }
     }
   }
 }
@@ -97,7 +101,7 @@ body {
     position: relative;
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    // justify-content: flex-end;
     padding: 0 3px;
 
     input {
@@ -107,23 +111,39 @@ body {
       position: absolute;
       z-index: 1;
 
-      &:checked {
-        & ~ .slider {
-          transform: translateX(-25px);
-        }
-      }
+      // &:checked {
+      //   & ~ .slider {
+      //     transform: translateX(-25px);
+      //   }
+      // }
 
-      &:unchecked {
-        & ~ .slider {
-          transform: translateX(25px);
-        }
-      }
+      // &:unchecked {
+      //   & ~ .slider {
+      //     transform: translateX(25px);
+      //   }
+      // }
     }
 
     .slider {
       width: 23px;
       height: 19px;
       background-color: $blue;
+    }
+
+    &.power {
+      justify-content: flex-end;
+
+      &--off > .slider {
+        transform: translateX(-25px);
+      }
+    }
+
+    &.bank {
+      justify-content: flex-start;
+
+      &--piano > .slider {
+        transform: translateX(25px);
+      }
     }
   }
 }
