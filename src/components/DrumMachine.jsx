@@ -87,7 +87,6 @@ const DrumMachine = () => {
 
   // Listen for user to press on key
   document.onkeydown = (event) => {
-    console.log(event.key)
     const audio = document.getElementById(event.key.toUpperCase())
 
     if (audio) {
@@ -99,7 +98,7 @@ const DrumMachine = () => {
   // Listen for user to click on a pad
   document.onmouseup = (event) => {
     const target = event.target
-    console.log(target)
+
     if (target.classList.contains('drum-pad')) {
       animatePad(target)
     }
